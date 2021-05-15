@@ -6,8 +6,8 @@ import MealsSummary from "./MealsSummary";
 function Meals() {
     return (
         <Fragment>
-            <AvailableMeals />
             <MealsSummary />
+            <AvailableMeals />
         </Fragment>
     );
 }

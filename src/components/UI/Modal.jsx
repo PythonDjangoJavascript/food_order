@@ -4,9 +4,9 @@ import ReactDOM from 'react-dom';
 
 import classes from "./Modal.module.css";
 
-function Backdrop() {
+function Backdrop(props) {
     return (
-        <div className={classes.backdrop} />
+        <div className={classes.backdrop} onClick={props.onClick} />
     )
 }
 
@@ -24,7 +24,7 @@ const portalElement = document.getElementById("overlays");
 function Model(props) {
     return (
         <Fragment>
-            {ReactDOM.createPortal(<Backdrop />, portalElement)}
+            {ReactDOM.createPortal(<Backdrop onClick={props.onClick} />, portalElement)}
             {reactDom.createPortal(<ModelOverlay>{props.children}</ModelOverlay>,
                 portalElement)}
         </Fragment>

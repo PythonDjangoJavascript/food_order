@@ -10,8 +10,15 @@ function Cart(props) {
     const cartCtx = useContext(CartContext);
     const totalAmount = cartCtx.totalAmount.toFixed(2);
 
-    const addItemHandler = (item) => { }
-    const removeItemHandler = (id) => { }
+    const addItemHandler = (item) => {
+        cartCtx.addItem({
+            ...item,
+            amount: 1
+        })
+    };
+    const removeItemHandler = (id) => {
+        cartCtx.removeItem(id);
+    }
 
     // Cart items with dummy data
     const cartItems = (
@@ -24,8 +31,8 @@ function Cart(props) {
                             name={item.name}
                             price={item.price}
                             amount={item.amount}
-                            onRemove={addItemHandler.bind(null, item)}
-                            onAdd={removeItemHandler.bind(null, item.id)}
+                            onRemove={removeItemHandler.bind(null, item.id)}
+                            onAdd={addItemHandler.bind(null, item)}
                         />
                     </ul>
                 )

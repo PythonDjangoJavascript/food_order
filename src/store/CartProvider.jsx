@@ -14,7 +14,7 @@ const defaultCartState = {
 function cartReducer(state, action) {
 
     if (action.type === "ADD_ITEM") {
-        const updatedPrice = state.totalAmount + action.item.price * action.item.amount;
+        const updatedTotalPrice = state.totalAmount + action.item.price * action.item.amount;
 
         // It will return the array index if item axist in the array
         const existingCartItemIndex = state.items.findIndex(
@@ -47,11 +47,34 @@ function cartReducer(state, action) {
 
         return {
             items: updatedItems,
-            totalAmount: updatedPrice
+            totalAmount: updatedTotalPrice
         }
+    } else if (action.type === "REMOVE_ITEM") {
+        const existingItemIndex = state.items.findIndex((item => action.id === item.id));
+        const existingItem = state.items[existingItemIndex];
+        const updatedPrice = state.totalAmount - existingItem.price;
+
+        let updatedItems
+        if (existingItem.amount === 1) {
+
+            // it will return an array without item with action.id id.
+            updatedItems = state.items.filter(item => item.id !== action.id)
+        } else {
+            const updatedItem = {
+                ...existingItem,
+                amount: existingItem.amount - 1
+            }
+            // again using spread op to avoaid refrence-value issue
+            updatedItems = [...state.items]
+            updatedItems[existingItemIndex] = updatedItem
+        }
+        return ({
+            items: updatedItems,
+            totalAmount: updatedPrice
+        })
     }
 
-    return defaultCartState;
+    // return defaultCartState;
 };
 
 function CartProvider(props) {

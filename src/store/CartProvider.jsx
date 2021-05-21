@@ -13,7 +13,7 @@ const defaultCartState = {
 // inside action object we can access everything pvided in dispatch
 function cartReducer(state, action) {
 
-    if (action.type == "ADD_ITEM") {
+    if (action.type === "ADD_ITEM") {
         // I am using items.concat insted of push as concat as it will add a
         // new item without editin old arry. this will solve the problem of
         // refrence-value(means value will get edited without react knowing

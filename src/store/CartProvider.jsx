@@ -19,7 +19,7 @@ function cartReducer(state, action) {
         // refrence-value(means value will get edited without react knowing
         //  about it)
         const updatedItems = state.items.concat(action.item);
-        const updatedPrice = state.items.totalAmount + action.item.price * action.item.amount
+        const updatedPrice = state.totalAmount + action.item.price * action.item.amount;
 
         return {
             items: updatedItems,

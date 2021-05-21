@@ -14,12 +14,36 @@ const defaultCartState = {
 function cartReducer(state, action) {
 
     if (action.type === "ADD_ITEM") {
-        // I am using items.concat insted of push as concat as it will add a
-        // new item without editin old arry. this will solve the problem of
-        // refrence-value(means value will get edited without react knowing
-        //  about it)
-        const updatedItems = state.items.concat(action.item);
         const updatedPrice = state.totalAmount + action.item.price * action.item.amount;
+
+        // It will return the array index if item axist in the array
+        const existingCartItemIndex = state.items.findIndex(
+            // (item) => item.id === state.item.id
+            (item) => item.id === action.item.id
+        );
+        // now lets get exiting item from the array
+        // it will be null if item does not exists
+        const existingItem = state.items[existingCartItemIndex];
+
+        let updatedItem
+        let updatedItems
+        if (existingItem) {
+            // It will just update the amount of the item
+            updatedItem = {
+                ...existingItem,
+                amount: existingItem.amount + action.item.amount
+            };
+
+            // using spread operators here to avoid refrence-valu issue
+            updatedItems = [...state.items];
+            updatedItems[existingCartItemIndex] = updatedItem;
+        } else {
+            // I am using items.concat insted of push as concat as it will add a
+            // new item without editin old arry. this will solve the problem of
+            // refrence-value(means value will get edited without react knowing
+            //  about it)
+            updatedItems = state.items.concat(action.item);
+        }
 
         return {
             items: updatedItems,

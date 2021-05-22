@@ -1,7 +1,13 @@
-# Getting Started with Create React App
+# Food Order APP
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Its a food order app. here user can add food item to their cart and remove 
+items for the cart. This entire project developed using ReactJS.
+Its a practice prject, practiced with UDEMY React course. The backend of this
+project is not developed yet and soon will be developed with Python(Django)
 
+## Live Link of this project:
+
+Open [Delicious Food Order App](https://wf0k9.csb.app/)    
 ## Available Scripts
 
 In the project directory, you can run:

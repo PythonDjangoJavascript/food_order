@@ -35,6 +35,11 @@ function AvailableMeals() {
 
     const [meals, setMeals] = useState([])
 
+    // State for the loading state
+    const [isLoading, setIsLoading] = useState(true)
+    // State for http Get error
+    const [httpError, setHttpError] = useState()
+
     // Fetch Data from Firebase
     useEffect(() => {
 
@@ -42,8 +47,13 @@ function AvailableMeals() {
         // useEffect
         const fecthData = async () => {
             const response = await fetch('https://food-order-app-2c4fc-default-rtdb.asia-southeast1.firebasedatabase.app/meals.json')
+
+            if (!response.ok) {
+                throw new Error("Something went wrong!")
+            }
+
             const responseData = await response.json()
-            console.log(responseData)
+
 
             const loadedMeals = []
 
@@ -58,11 +68,27 @@ function AvailableMeals() {
 
             // Now Update the state of meals list with fetched data
             setMeals(loadedMeals)
+            setIsLoading(false)
         }
 
         // Execute the fecthc and load funciton
-        fecthData()
+        fecthData().catch(error => {
+            setIsLoading(false)
+            setHttpError(error.message)
+        })
     }, [])
+
+    if (isLoading) {
+        return <section className={classes.MealsLoading}>
+            <p>Loading...</p>
+        </section>
+    }
+
+    if (httpError) {
+        return <section className={classes.MealsError}>
+            <p>{httpError}</p>
+        </section>
+    }
 
 
     const mealsList = meals.map(meal => {

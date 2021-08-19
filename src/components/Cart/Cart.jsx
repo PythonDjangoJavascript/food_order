@@ -29,6 +29,17 @@ function Cart(props) {
         setShowCheckoutForm(true)
     }
 
+    // Post data to Firebase on form submit
+    const onOrderSubmit = (userData) => {
+        fetch('https://food-order-app-2c4fc-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json', {
+            method: "POST",
+            body: JSON.stringify({
+                user: userData,
+                orderItems: cartCtx.items
+            })
+        })
+    }
+
     // Cart items with dummy data
     const cartItems = (
         <ul className={classes["cart-items"]}>
@@ -67,7 +78,7 @@ function Cart(props) {
                 <span>Total Amount</span>
                 <span>{totalAmount}</span>
             </div>
-            {showCheckoutForm ? <Checkout onCancel={props.onHideCart} /> : cartActionBtns}
+            {showCheckoutForm ? <Checkout onOrder={onOrderSubmit} onCancel={props.onHideCart} /> : cartActionBtns}
         </Modal >
     );
 }

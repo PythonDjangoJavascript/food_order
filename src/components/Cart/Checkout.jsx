@@ -55,8 +55,6 @@ const Checkout = props => {
             cityIsValid
         )
 
-        console.log(formIsValid)
-
         if (!formIsValid) {
             nameBlurHandler()
             streetBlurHandler()
@@ -65,7 +63,13 @@ const Checkout = props => {
             return
         }
 
-        console.log(nameInput)
+        // Call order function to submit data to firebase
+        props.onOrder({
+            name: nameInput,
+            street: streetInput,
+            city: cityInput,
+            postCode: postCodeInput
+        })
 
         // nor reset all value
         nameResetHandler()
@@ -124,7 +128,7 @@ const Checkout = props => {
                 onChange={cityChangeHandler}
                 onBlur={cityBlurHandler}
             />
-            {cityResetHandler && <p>Please Enter a valid City</p>}
+            {cityHasError && <p>Please Enter a valid City</p>}
         </div>
         <div className={classes.actions}>
             <button type="button" onClick={props.onCancel}>Cancel</button>

@@ -53,7 +53,11 @@
     background-color: #7a2706;
 }
 
-.invalid label{
+/* .invalid label{
+    color: #ca3e51;
+} */
+
+.invalid p {
     color: #ca3e51;
 }
 

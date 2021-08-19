@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import react, { useContext, useState } from "react";
 
 import classes from "./Cart.module.css";
 import Modal from "../UI/Modal";
@@ -10,6 +10,10 @@ function Cart(props) {
 
     // order checkout state
     const [showCheckoutForm, setShowCheckoutForm] = useState(false)
+    // Loading State
+    const [isOrderSubmitting, setIsOrderSubmitting] = useState(false)
+    // success of submitting data
+    const [didSubmit, setDidSubmit] = useState(false)
 
     const cartCtx = useContext(CartContext);
     const totalAmount = cartCtx.totalAmount.toFixed(2);
@@ -30,14 +34,21 @@ function Cart(props) {
     }
 
     // Post data to Firebase on form submit
-    const onOrderSubmit = (userData) => {
-        fetch('https://food-order-app-2c4fc-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json', {
+    const onOrderSubmit = async (userData) => {
+        setIsOrderSubmitting(true)
+        const response = await fetch('https://food-order-app-2c4fc-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json', {
             method: "POST",
             body: JSON.stringify({
                 user: userData,
                 orderItems: cartCtx.items
             })
         })
+
+        if (response.ok) {
+            setDidSubmit(true)
+            cartCtx.resetItems()
+        }
+        setIsOrderSubmitting(false)
     }
 
     // Cart items with dummy data
@@ -71,14 +82,32 @@ function Cart(props) {
         </div>
     )
 
+    // cart comp
+    const cartModelConstent = <>
+        {!showCheckoutForm && cartItems}
+        <div className={classes.total}>
+            <span>Total Amount</span>
+            <span>{totalAmount}</span>
+        </div>
+        {showCheckoutForm ? <Checkout onOrder={onOrderSubmit} onCancel={props.onHideCart} /> : cartActionBtns}
+    </>
+
+    const isSubmittingModelContent = <p>Sending order data...</p>
+
+    const submitSuccessful = <>
+        <p>Successfully placed the order</p>
+        <div className={classes.actions}>
+            <button className={classes.button} onClick={props.onHideCart}>
+                Close
+            </button>
+        </div>
+    </>
+
     return (
         <Modal onClick={props.onHideCart}>
-            {cartItems}
-            <div className={classes.total}>
-                <span>Total Amount</span>
-                <span>{totalAmount}</span>
-            </div>
-            {showCheckoutForm ? <Checkout onOrder={onOrderSubmit} onCancel={props.onHideCart} /> : cartActionBtns}
+            {!isOrderSubmitting && !didSubmit && cartModelConstent}
+            {isOrderSubmitting && isSubmittingModelContent}
+            {!isOrderSubmitting && didSubmit && submitSuccessful}
         </Modal >
     );
 }

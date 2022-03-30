@@ -1,4 +1,4 @@
-import react, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 
 import classes from "./Cart.module.css";
 import Modal from "../UI/Modal";
